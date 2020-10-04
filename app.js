@@ -5,6 +5,57 @@ const http = require('http'),
   bodyParser = require('body-parser'),
   httpProxy = require('http-proxy'),
   { MongoClient } = require('mongodb')
+const { isNumber } = require('util')
+
+const mongo = new MongoClient('mongodb://root:1q2w3e4r@localhost:27017')
+
+function typeTheObject(obj) {
+  let prop = {}
+
+  if(obj === null) {
+    return {
+      type: 'string',
+    }
+  }
+
+  if (typeof obj === 'boolean') {
+    prop.type = 'boolean'
+    return prop
+  }
+  if (typeof obj === 'number' || typeof obj === 'bigint') {
+    prop.type = 'number'
+    return prop
+  }
+
+  if (Array.isArray(obj)) {
+    prop.type = 'array'
+    let types = []
+    for (const item in obj) {
+      types.push(typeTheObject(item))
+    }
+    prop.items = {
+      anyOf: [...new Set(types.map((t) => t.type))],
+    }
+    return prop
+  }
+
+  if (typeof obj === 'object') {
+    prop.type = 'object'
+    prop.properties = {}
+
+    for (const key in obj) {
+      prop.properties[key] = typeTheObject(obj[key])
+    }
+    return prop
+  }
+
+  if (typeof obj === 'undefined') {
+    return undefined
+  }
+
+  prop.type = 'string'
+  return prop
+}
 
 const responseIntercept = (req, res, next) => {
   var oldWrite = res.write,
@@ -19,8 +70,7 @@ const responseIntercept = (req, res, next) => {
   }
 
   res.end = function (chunk) {
-    if (chunk)
-      chunks.push(chunk)
+    if (chunk) chunks.push(chunk)
 
     var body = Buffer.concat(chunks).toString('utf8')
     console.log(`${req.method} ${req.path}`, {
@@ -30,6 +80,44 @@ const responseIntercept = (req, res, next) => {
       responseBody: JSON.parse(body),
     })
 
+    let bodyData
+
+    if (req.headers['content-type'] === 'application/json') {
+     
+      if(typeof req.body === 'object')
+        bodyData = req.body
+      else if(typeof req.body === 'string')
+        bodyData = JSON.parse(req.body)
+    }
+
+    const reqBodyProps = typeTheObject(bodyData)
+
+    const resBodyProps = typeTheObject(JSON.parse(body))
+
+    const routeData = {
+      path: req.path,
+      [String(req.method).toLowerCase()]: {
+        requestBody: {
+          content: {
+            [req.headers['content-type']]: {
+              schema: reqBodyProps,
+            },
+          },
+        },
+        responses: {
+          [res.statusCode]: {
+            content: {
+              [res.getHeader('content-type')]: {
+                schema: resBodyProps
+              }
+            }
+          }
+        }
+      },
+    }
+
+    console.log(`route data -> `, JSON.stringify(routeData))
+
     oldEnd.apply(res, arguments)
   }
 
@@ -37,10 +125,9 @@ const responseIntercept = (req, res, next) => {
 }
 
 const init = async () =>
-  new MongoClient('mongodb://root:1q2w3e4r@localhost:27017')
+  mongo
     .connect()
-    .then((client) => client.db('swagger'))
-    .then((db) =>
+    .then((client) =>
       httpProxy
         .createProxyServer({
           target: 'http://markets.smartersvision.com',
@@ -49,17 +136,16 @@ const init = async () =>
         })
         .on('proxyReq', (proxyReq, req, res, options) => {
           proxyReq.setHeader('host', 'markets.smartersvision.com')
-
           if (req.method == 'POST' && req.body) {
             const bodyData = JSON.stringify(req.body)
-            proxyReq.setHeader('Content-Type','application/json');
-            proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
+            proxyReq.setHeader('Content-Type', 'application/json')
+            proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData))
 
             proxyReq.write(bodyData)
             proxyReq.end()
           }
         })
-        .on('error', e => console.error(`proxy error -> `, e))
+        .on('error', (e) => console.error(`proxy error -> `, e)),
     )
     .then((proxyServer) =>
       express()
@@ -67,7 +153,7 @@ const init = async () =>
         .use(bodyParser.json())
         .use(bodyParser.urlencoded({ extended: true }))
         .use(responseIntercept)
-        .use((req, res) => proxyServer.web(req, res))
+        .use((req, res) => proxyServer.web(req, res)),
     )
     .then((proxyApp) => http.createServer(proxyApp))
     .then((httpServer) => httpServer.listen(3000))
