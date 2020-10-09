@@ -22,7 +22,7 @@ function typeTheObject(obj) {
     prop.type = 'boolean'
     return prop
   }
-  if (typeof obj === 'number' || typeof obj === 'bigint') {
+  if (typeof obj === 'number' || typeof obj === 'bigint' || !isNaN(obj)) {
     prop.type = 'number'
     return prop
   }
@@ -92,10 +92,21 @@ const responseIntercept = (req, res, next) => {
 
     const reqBodyProps = typeTheObject(bodyData)
 
+    const reqQueryProps = []
+
+    for(const key in req.query) {
+      reqQueryProps.push({
+        name: key,
+        in: 'query',
+        schema: typeTheObject(req.query[key]),
+      })
+    }
+
     const resBodyProps = typeTheObject(JSON.parse(body))
 
     const routeData = {
       path: req.path,
+      parameters: reqQueryProps,
       [String(req.method).toLowerCase()]: {
         requestBody: {
           content: {
