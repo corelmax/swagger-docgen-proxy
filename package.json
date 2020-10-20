@@ -2,8 +2,12 @@
   "name": "swagger-proxy",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=12"
+  },
   "scripts": {
-    "start": "node app.js"
+    "start": "node --experimental-modules --es-module-specifier-resolution=node --experimental-json-modules ./src/index.js"
   },
   "dependencies": {
     "axios": "^0.20.0",
