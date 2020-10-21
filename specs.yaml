@@ -7,16 +7,12 @@ servers:
   - url: ''
 paths:
   /api/settings:
+    description: /api/settings
     parameters: []
     get:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: {}
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -109,12 +105,9 @@ paths:
         schema:
           type: string
     get:
-      requestBody:
-        content:
-          undefined:
-            schema: {}
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -150,12 +143,9 @@ paths:
         schema:
           type: string
     get:
-      requestBody:
-        content:
-          undefined:
-            schema: {}
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -171,24 +161,9 @@ paths:
                   message:
                     type: string
     post:
-      requestBody:
-        content:
-          application/json; charset=utf-8:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                review:
-                  type: string
-                rate:
-                  type: number
-                user_id:
-                  type: number
-                market_id:
-                  type: number
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -217,6 +192,22 @@ paths:
                         type: number
                   message:
                     type: string
+      requestBody:
+        content:
+          application/json; charset=utf-8:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                review:
+                  type: string
+                rate:
+                  type: number
+                user_id:
+                  type: number
+                market_id:
+                  type: number
   /api/orders:
     description: /api/orders
     parameters:
@@ -249,12 +240,9 @@ paths:
         schema:
           type: number
     get:
-      requestBody:
-        content:
-          undefined:
-            schema: {}
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -270,6 +258,44 @@ paths:
                   message:
                     type: string
     post:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      user_id:
+                        type: number
+                      order_status_id:
+                        type: number
+                      tax:
+                        type: number
+                      delivery_fee:
+                        type: number
+                      hint:
+                        type: string
+                      updated_at:
+                        type: string
+                      created_at:
+                        type: string
+                      id:
+                        type: number
+                      custom_fields:
+                        type: number
+                      product_orders:
+                        type: array
+                        items:
+                          anyOf:
+                            - type: number
+                  message:
+                    type: string
       requestBody:
         content:
           application/json; charset=utf-8:
@@ -310,73 +336,13 @@ paths:
                   type: number
                 stripe_cvc:
                   type: number
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: object
-                    properties:
-                      user_id:
-                        type: number
-                      order_status_id:
-                        type: number
-                      tax:
-                        type: number
-                      delivery_fee:
-                        type: number
-                      hint:
-                        type: string
-                      updated_at:
-                        type: string
-                      created_at:
-                        type: string
-                      id:
-                        type: number
-                      custom_fields:
-                        type: number
-                      product_orders:
-                        type: array
-                        items:
-                          anyOf:
-                            - type: number
-                  message:
-                    type: string
   /api/register:
     description: /api/register
     parameters: []
     post:
-      requestBody:
-        content:
-          application/json; charset=utf-8:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                email:
-                  type: string
-                name:
-                  type: string
-                password:
-                  type: string
-                api_token:
-                  type: string
-                phone:
-                  type: string
-                address:
-                  type: string
-                bio:
-                  type: string
-                media:
-                  type: string
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -417,6 +383,30 @@ paths:
                             - type: number
                   message:
                     type: string
+      requestBody:
+        content:
+          application/json; charset=utf-8:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                email:
+                  type: string
+                name:
+                  type: string
+                password:
+                  type: string
+                api_token:
+                  type: string
+                phone:
+                  type: string
+                address:
+                  type: string
+                bio:
+                  type: string
+                media:
+                  type: string
   /api/fields:
     description: /api/fields
     parameters:
@@ -429,12 +419,9 @@ paths:
         schema:
           type: string
     get:
-      requestBody:
-        content:
-          undefined:
-            schema: {}
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -446,7 +433,7 @@ paths:
                     type: array
                     items:
                       anyOf:
-                        - number
+                        - type: number
                   message:
                     type: string
   /api/delivery_addresses:
@@ -473,12 +460,9 @@ paths:
         schema:
           type: string
     get:
-      requestBody:
-        content:
-          undefined:
-            schema: {}
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -514,12 +498,9 @@ paths:
         schema:
           type: number
     get:
-      requestBody:
-        content:
-          undefined:
-            schema: {}
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -528,31 +509,13 @@ paths:
                   success:
                     type: boolean
                   data:
-                    type: array
-                    items:
-                      anyOf:
-                        - type: number
+                    type: number
                   message:
                     type: string
     post:
-      requestBody:
-        content:
-          application/json; charset=utf-8:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                quantity:
-                  type: number
-                product_id:
-                  type: number
-                user_id:
-                  type: number
-                options:
-                  type: number
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -579,16 +542,29 @@ paths:
                         type: number
                   message:
                     type: string
+      requestBody:
+        content:
+          application/json; charset=utf-8:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                quantity:
+                  type: number
+                product_id:
+                  type: number
+                user_id:
+                  type: number
+                options:
+                  type: number
   /api/categories/1:
     description: /api/categories/1
     parameters: []
     get:
-      requestBody:
-        content:
-          undefined:
-            schema: {}
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -633,12 +609,9 @@ paths:
         schema:
           type: number
     get:
-      requestBody:
-        content:
-          undefined:
-            schema: {}
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -647,7 +620,25 @@ paths:
                   success:
                     type: boolean
                   data:
-                    type: string
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      product_id:
+                        type: number
+                      user_id:
+                        type: number
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      custom_fields:
+                        type: number
+                      options:
+                        type: array
+                        items:
+                          anyOf:
+                            - type: number
                   message:
                     type: string
   /api/favorites:
@@ -670,25 +661,9 @@ paths:
         schema:
           type: string
     post:
-      requestBody:
-        content:
-          application/json; charset=utf-8:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                product_id:
-                  type: number
-                user_id:
-                  type: number
-                options:
-                  type: array
-                  items:
-                    anyOf:
-                      - type: number
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -718,13 +693,24 @@ paths:
                             - type: number
                   message:
                     type: string
-    get:
       requestBody:
         content:
-          undefined:
-            schema: {}
+          application/json; charset=utf-8:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                product_id:
+                  type: number
+                user_id:
+                  type: number
+                options:
+                  type: number
+    get:
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -736,7 +722,7 @@ paths:
                     type: array
                     items:
                       anyOf:
-                        - number
+                        - type: number
                   message:
                     type: string
   /api/galleries:
@@ -751,12 +737,9 @@ paths:
         schema:
           type: string
     get:
-      requestBody:
-        content:
-          undefined:
-            schema: {}
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -886,10 +869,6 @@ paths:
         schema:
           type: string
     get:
-      requestBody:
-        content:
-          undefined:
-            schema: {}
       responses:
         '200':
           content:
@@ -1045,12 +1024,9 @@ paths:
         schema:
           type: string
     get:
-      requestBody:
-        content:
-          undefined:
-            schema: {}
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -1062,31 +1038,16 @@ paths:
                     type: array
                     items:
                       anyOf:
-                        - number
+                        - type: number
                   message:
                     type: string
   /api/product_reviews:
     description: /api/product_reviews
     parameters: []
     post:
-      requestBody:
-        content:
-          application/json; charset=utf-8:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                review:
-                  type: string
-                rate:
-                  type: number
-                user_id:
-                  type: number
-                product_id:
-                  type: number
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -1115,6 +1076,22 @@ paths:
                         type: number
                   message:
                     type: string
+      requestBody:
+        content:
+          application/json; charset=utf-8:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                review:
+                  type: string
+                rate:
+                  type: number
+                user_id:
+                  type: number
+                product_id:
+                  type: number
   /api/login:
     description: /api/login
     parameters: []
@@ -1321,10 +1298,6 @@ paths:
         schema:
           type: string
     get:
-      requestBody:
-        content:
-          undefined:
-            schema: {}
       responses:
         '200':
           content:
@@ -1500,12 +1473,9 @@ paths:
         schema:
           type: number
     get:
-      requestBody:
-        content:
-          undefined:
-            schema: {}
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -1651,10 +1621,6 @@ paths:
         schema:
           type: string
     get:
-      requestBody:
-        content:
-          undefined:
-            schema: {}
       responses:
         '200':
           content:
@@ -1800,5 +1766,607 @@ paths:
                             type: string
                           custom_fields:
                             type: number
+                  message:
+                    type: string
+  /api/users/91:
+    description: /api/users/91
+    parameters:
+      - name: api_token
+        in: query
+        schema:
+          type: string
+    post:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      api_token:
+                        type: string
+                      device_token:
+                        type: number
+                      stripe_id:
+                        type: string
+                      card_brand:
+                        type: string
+                      card_last_four:
+                        type: string
+                      trial_ends_at:
+                        type: string
+                      braintree_id:
+                        type: string
+                      paypal_email:
+                        type: string
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      custom_fields:
+                        type: object
+                        properties:
+                          phone:
+                            type: object
+                            properties:
+                              value:
+                                type: number
+                              view:
+                                type: number
+                              name:
+                                type: string
+                          bio:
+                            type: object
+                            properties:
+                              value:
+                                type: string
+                              view:
+                                type: string
+                              name:
+                                type: string
+                          address:
+                            type: object
+                            properties:
+                              value:
+                                type: string
+                              view:
+                                type: string
+                              name:
+                                type: string
+                      has_media:
+                        type: boolean
+                      media:
+                        type: array
+                        items:
+                          anyOf:
+                            - type: number
+                  message:
+                    type: string
+      requestBody:
+        content:
+          application/json; charset=utf-8:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+                email:
+                  type: string
+                name:
+                  type: string
+                password:
+                  type: string
+                api_token:
+                  type: string
+                phone:
+                  type: number
+                address:
+                  type: string
+                bio:
+                  type: string
+                media:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    name:
+                      type: string
+                    url:
+                      type: string
+                    thumb:
+                      type: string
+                    icon:
+                      type: string
+                    formated_size:
+                      type: string
+  /api/orders/61:
+    description: /api/orders/61
+    parameters:
+      - name: api_token
+        in: query
+        schema:
+          type: string
+      - name: with
+        in: query
+        schema:
+          type: string
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      user_id:
+                        type: number
+                      order_status_id:
+                        type: number
+                      tax:
+                        type: number
+                      delivery_fee:
+                        type: number
+                      hint:
+                        type: string
+                      active:
+                        type: boolean
+                      driver_id:
+                        type: string
+                      delivery_address_id:
+                        type: string
+                      payment_id:
+                        type: number
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      custom_fields:
+                        type: number
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          name:
+                            type: string
+                          email:
+                            type: string
+                          api_token:
+                            type: string
+                          device_token:
+                            type: number
+                          stripe_id:
+                            type: string
+                          card_brand:
+                            type: string
+                          card_last_four:
+                            type: string
+                          trial_ends_at:
+                            type: string
+                          braintree_id:
+                            type: string
+                          paypal_email:
+                            type: string
+                          created_at:
+                            type: string
+                          updated_at:
+                            type: string
+                          custom_fields:
+                            type: object
+                            properties:
+                              phone:
+                                type: object
+                                properties:
+                                  value:
+                                    type: number
+                                  view:
+                                    type: number
+                                  name:
+                                    type: string
+                              bio:
+                                type: object
+                                properties:
+                                  value:
+                                    type: string
+                                  view:
+                                    type: string
+                                  name:
+                                    type: string
+                              address:
+                                type: object
+                                properties:
+                                  value:
+                                    type: string
+                                  view:
+                                    type: string
+                                  name:
+                                    type: string
+                          has_media:
+                            type: boolean
+                          media:
+                            type: array
+                            items:
+                              anyOf:
+                                - type: number
+                      product_orders:
+                        type: array
+                        items:
+                          anyOf:
+                            - type: number
+                      order_status:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          status:
+                            type: string
+                          created_at:
+                            type: string
+                          updated_at:
+                            type: string
+                          custom_fields:
+                            type: number
+                      delivery_address:
+                        type: string
+                      payment:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          price:
+                            type: number
+                          description:
+                            type: string
+                          user_id:
+                            type: number
+                          status:
+                            type: string
+                          method:
+                            type: string
+                          created_at:
+                            type: string
+                          updated_at:
+                            type: string
+                          custom_fields:
+                            type: number
+                  message:
+                    type: string
+  /api/users/92:
+    description: /api/users/92
+    parameters:
+      - name: api_token
+        in: query
+        schema:
+          type: string
+    post:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      api_token:
+                        type: string
+                      device_token:
+                        type: number
+                      stripe_id:
+                        type: string
+                      card_brand:
+                        type: string
+                      card_last_four:
+                        type: string
+                      trial_ends_at:
+                        type: string
+                      braintree_id:
+                        type: string
+                      paypal_email:
+                        type: string
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      custom_fields:
+                        type: object
+                        properties:
+                          phone:
+                            type: object
+                            properties:
+                              value:
+                                type: number
+                              view:
+                                type: number
+                              name:
+                                type: string
+                          bio:
+                            type: object
+                            properties:
+                              value:
+                                type: string
+                              view:
+                                type: string
+                              name:
+                                type: string
+                          address:
+                            type: object
+                            properties:
+                              value:
+                                type: string
+                              view:
+                                type: string
+                              name:
+                                type: string
+                      has_media:
+                        type: boolean
+                      media:
+                        type: array
+                        items:
+                          anyOf:
+                            - type: number
+                  message:
+                    type: string
+      requestBody:
+        content:
+          application/json; charset=utf-8:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+                email:
+                  type: string
+                name:
+                  type: string
+                password:
+                  type: string
+                api_token:
+                  type: string
+                phone:
+                  type: number
+                address:
+                  type: string
+                bio:
+                  type: string
+                media:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    name:
+                      type: string
+                    url:
+                      type: string
+                    thumb:
+                      type: string
+                    icon:
+                      type: string
+                    formated_size:
+                      type: string
+  /api/orders/62:
+    description: /api/orders/62
+    parameters:
+      - name: api_token
+        in: query
+        schema:
+          type: string
+      - name: with
+        in: query
+        schema:
+          type: string
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      user_id:
+                        type: number
+                      order_status_id:
+                        type: number
+                      tax:
+                        type: number
+                      delivery_fee:
+                        type: number
+                      hint:
+                        type: string
+                      active:
+                        type: boolean
+                      driver_id:
+                        type: string
+                      delivery_address_id:
+                        type: string
+                      payment_id:
+                        type: number
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      custom_fields:
+                        type: number
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          name:
+                            type: string
+                          email:
+                            type: string
+                          api_token:
+                            type: string
+                          device_token:
+                            type: number
+                          stripe_id:
+                            type: string
+                          card_brand:
+                            type: string
+                          card_last_four:
+                            type: string
+                          trial_ends_at:
+                            type: string
+                          braintree_id:
+                            type: string
+                          paypal_email:
+                            type: string
+                          created_at:
+                            type: string
+                          updated_at:
+                            type: string
+                          custom_fields:
+                            type: object
+                            properties:
+                              phone:
+                                type: object
+                                properties:
+                                  value:
+                                    type: number
+                                  view:
+                                    type: number
+                                  name:
+                                    type: string
+                              bio:
+                                type: object
+                                properties:
+                                  value:
+                                    type: string
+                                  view:
+                                    type: string
+                                  name:
+                                    type: string
+                              address:
+                                type: object
+                                properties:
+                                  value:
+                                    type: string
+                                  view:
+                                    type: string
+                                  name:
+                                    type: string
+                          has_media:
+                            type: boolean
+                          media:
+                            type: array
+                            items:
+                              anyOf:
+                                - type: number
+                      product_orders:
+                        type: array
+                        items:
+                          anyOf:
+                            - type: number
+                      order_status:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          status:
+                            type: string
+                          created_at:
+                            type: string
+                          updated_at:
+                            type: string
+                          custom_fields:
+                            type: number
+                      delivery_address:
+                        type: string
+                      payment:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          price:
+                            type: number
+                          description:
+                            type: string
+                          user_id:
+                            type: number
+                          status:
+                            type: string
+                          method:
+                            type: string
+                          created_at:
+                            type: string
+                          updated_at:
+                            type: string
+                          custom_fields:
+                            type: number
+                  message:
+                    type: string
+  /api/favorites/52:
+    description: /api/favorites/52
+    parameters:
+      - name: api_token
+        in: query
+        schema:
+          type: string
+    delete:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      product_id:
+                        type: number
+                      user_id:
+                        type: number
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      custom_fields:
+                        type: number
+                      options:
+                        type: number
                   message:
                     type: string

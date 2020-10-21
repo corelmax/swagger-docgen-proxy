@@ -10,24 +10,11 @@ export function FormatRequest(req, reqQueryProps, reqBodyProps, res, resBodyProp
 
   const { parameters, ...pathObj } = paths.get(req.path);
 
-  paths.set(req.path, {
-    description: req.path,
-    parameters: R.uniqBy(R.path(['name']))([
-      ...Array.from(parameters || []),
-      ...Array.from(reqQueryProps || []),
-    ]),
-    ...pathObj,
+  const currentMethodObj = {
     [String(req.method).toLowerCase()]: {
-      requestBody: {
-        content: {
-          [req.headers['content-type']]: {
-            schema: reqBodyProps,
-          },
-        },
-      },
       responses: {
         [res.statusCode]: {
-          description: res.statusText,
+          description: `${res.statusMessage}`,
           content: {
             [res.getHeader('content-type')]: {
               schema: resBodyProps
@@ -36,5 +23,27 @@ export function FormatRequest(req, reqQueryProps, reqBodyProps, res, resBodyProp
         }
       }
     },
-  });
+  }
+
+  if(['put', 'post', 'patch'].includes(String(req.method).toLowerCase())) {
+    currentMethodObj[String(req.method).toLowerCase()].requestBody = {
+      content: {
+        [req.headers['content-type']]: {
+          schema: reqBodyProps,
+        },
+      },
+    }
+  }
+
+  const currentPathObj = {
+    description: req.path,
+    parameters: R.uniqBy(R.path(['name']))([
+      ...Array.from(parameters || []),
+      ...Array.from(reqQueryProps || []),
+    ]),
+    ...pathObj,
+    ...currentMethodObj
+  }
+
+  paths.set(req.path, currentPathObj);
 }
