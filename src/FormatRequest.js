@@ -27,6 +27,7 @@ export function FormatRequest(req, reqQueryProps, reqBodyProps, res, resBodyProp
       },
       responses: {
         [res.statusCode]: {
+          description: res.statusText,
           content: {
             [res.getHeader('content-type')]: {
               schema: resBodyProps
