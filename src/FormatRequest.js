@@ -1,4 +1,7 @@
-export const paths = new Map()
+import R from 'ramda';
+import specs from '../specs.json'
+
+export const paths = new Map(Object.entries(specs.paths))
 
 export function FormatRequest(req, reqQueryProps, reqBodyProps, res, resBodyProps) {
   if (!paths.has(req.path)) {
@@ -8,10 +11,11 @@ export function FormatRequest(req, reqQueryProps, reqBodyProps, res, resBodyProp
   const { parameters, ...pathObj } = paths.get(req.path);
 
   paths.set(req.path, {
-    parameters: {
-      ...parameters,
-      ...reqQueryProps
-    },
+    description: req.path,
+    parameters: R.uniqBy(R.path(['name']))([
+      ...Array.from(parameters || []),
+      ...Array.from(reqQueryProps || []),
+    ]),
     ...pathObj,
     [String(req.method).toLowerCase()]: {
       requestBody: {

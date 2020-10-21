@@ -23,7 +23,7 @@ export function typeTheObject(obj) {
       types.push(typeTheObject(item));
     }
     prop.items = {
-      anyOf: [...new Set(types.map((t) => t.type))],
+      anyOf: [...new Set(types.map((t) => t.type))].map(t => ({ type: t})),
     };
     return prop;
   }

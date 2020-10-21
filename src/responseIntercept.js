@@ -29,7 +29,7 @@ export const responseIntercept = (req, res, next) => {
 
     let bodyData;
 
-    if (req.headers['content-type'] === 'application/json') {
+    if (String(req.headers['content-type']).includes('application/json')) {
 
       if (typeof req.body === 'object')
         bodyData = req.body;
@@ -37,7 +37,7 @@ export const responseIntercept = (req, res, next) => {
         bodyData = JSON.parse(req.body);
     }
 
-    const reqBodyProps = typeTheObject(bodyData);
+    const reqBodyProps = bodyData ? typeTheObject(bodyData) : {};
 
     const reqQueryProps = [];
 
